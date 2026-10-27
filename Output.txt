@@ -1,0 +1,151 @@
+NULLs in Users:
+user_id                0
+device_type            0
+acquisition_channel    0
+customer_type          0
+region                 0
+pre_sessions_30d       0
+pre_orders_90d         0
+pre_spend_90d          0
+dtype: int64
+
+NULLs in Assignments:
+user_id        0
+variant        0
+assigned_at    0
+dtype: int64
+
+NULLs in Orders:
+order_id                    0
+user_id                     0
+ordered_at                  0
+order_value                 0
+shipping_fee_charged        0
+shipping_cost_to_company    0
+item_count                  0
+returned                    0
+dtype: int64
+
+Max Order Date: 2026-10-06 10:03:41
+Min Order Date: 2026-09-01 05:32:16
+Max Assignment Date: 2026-09-22 22:55:01
+Min Assignment Date: 2026-09-01 00:01:15
+Uniqueness in Users table (user_id): True
+Uniqueness in Assignments table (user_id): False
+Uniqueness in Orders table (order_id): True
+Do all users have an assignment?: True
+Orders whose user is missing from users or assignments: 0
+
+Assignment rows (raw): 64,296
+Users logged twice in the SAME variant (keep earliest row): 256
+Users logged in BOTH variants (excluded): 40
+Users in the analysis: 63,960
+
+Observed: [32011, 31949]
+Expected: [31980.0, 31980.0]
+p-value:  0.806338
+Result:   NO SRM DETECTED. Traffic allocation is unbiased.
+
+variant      control  treatment
+device_type                    
+desktop       0.3282     0.3348
+mobile        0.6239     0.6158
+tablet        0.0479     0.0494
+
+variant              control  treatment
+acquisition_channel                    
+direct                0.1622     0.1609
+email                 0.1423     0.1392
+organic_search        0.3030     0.2972
+paid_search           0.2149     0.2170
+social                0.1776     0.1857
+
+variant        control  treatment
+customer_type                    
+new             0.6978     0.6981
+returning       0.3022     0.3019
+
+final_df rows: 63,960  | unique users: 63,960
+Buyers: 2,618  | in-window orders: 2,785
+
+Control Conversion Rate:   3.9%
+Treatment Conversion Rate: 4.28%
+Absolute Lift:             0.383 pp
+Relative Lift:             9.82%
+Z-Statistic:               2.4455
+p-value:                   0.0145
+Result:                    Statistically significant at the 5% level: reject the null of no effect. Judge the size of the effect from the confidence interval below.
+95% CI for the lift: 0.08 pp to 0.69 pp
+
+--- Per-user metrics, all users ---
+Revenue per user: control $3.132 | treatment $3.239 | diff $+0.107 | 95% CI [-0.225, +0.440] | t = 0.63, p = 0.5261
+Margin per user : control $0.990 | treatment $0.898 | diff $-0.091 | 95% CI [-0.199, +0.016] | t = -1.66, p = 0.0964
+
+Bulk-order users (any order >= $500): 11  {'control': 8, 'treatment': 3}
+
+--- Per-user metrics, excluding bulk-order users ---
+Revenue per user: control $2.881 | treatment $3.172 | diff $+0.291 | 95% CI [+0.021, +0.561] | t = 2.11, p = 0.0347
+Margin per user : control $0.902 | treatment $0.882 | diff $-0.020 | 95% CI [-0.105, +0.065] | t = -0.46, p = 0.6485
+
+--- Average order value ---
+AOV, all users:            control $75.37 | treatment $71.12
+AOV, excluding bulk users: control $69.85 | treatment $69.79
+
+--- Return rate ---
+Return Rate Control:   8.11%
+Return Rate Treatment: 9.16%
+Z-Stat: 0.985   p-value: 0.3245
+
+--- Margin per user at 1,000,000 users (all users) ---
+Point estimate: $-91,358   95% range: $-199,059 to $+16,344
+
+--- Margin decomposition per user (all users) ---
+           merch_margin  net_shipping  margin
+variant                                      
+control           1.094        -0.105   0.990
+treatment         1.113        -0.215   0.898
+Treatment minus control:
+merch_margin    0.019
+net_shipping   -0.110
+margin         -0.091
+dtype: float64
+
+--- Decision rule ---
+Conversion lift significant and positive: True
+Margin per user significantly lower:      False
+Rule says: SHIP
+Caveat: the margin CI includes a possible loss, so flag the profitability risk.
+
+   group   segment  n_control  n_treatment  rate_control_%  rate_treatment_%  lift_pp  ci_low_pp  ci_high_pp  p_value  se_pp  p_bonferroni
+ Overall   Overall      32011        31949          3.9018            4.2850   0.3832     0.0761      0.6903   0.0145 0.1567           NaN
+  Device   desktop      10505        10696          4.8739            4.9084   0.0345    -0.5462      0.6152   0.9073 0.2963        1.0000
+  Device    mobile      19972        19675          3.4248            3.9492   0.5244     0.1533      0.8954   0.0056 0.1893        0.0279
+  Device    tablet       1534         1578          3.4550            4.2459   0.7909    -0.5601      2.1418   0.2520 0.6893        1.0000
+Customer       new      22337        22303          2.9458            3.3314   0.3856     0.0621      0.7091   0.0195 0.1650        0.0974
+Customer returning       9674         9646          6.1092            6.4897   0.3806    -0.3046      1.0658   0.2763 0.3496        1.0000
+Device: Q = 2.275, df = 2, p = 0.321
+Customer: Q = 0.000, df = 1, p = 0.990
+
+Overall: baseline 3.90%, ~31,949 users per arm
+  MDE at 80% power: 0.44 pp   (observed lift was +0.38 pp)
+
+MDE by segment (80% power):
+                 segment  users_per_arm  baseline_%  MDE_pp
+    device_type: desktop          10505        4.87    0.87
+     device_type: mobile          19675        3.42    0.53
+     device_type: tablet           1534        3.46    2.09
+      customer_type: new          22303        2.95    0.47
+customer_type: returning           9646        6.11    1.00
+
+Mobile baseline conversion: 3.42%
+Users needed per arm to detect each lift (80% power, 5% level):
+  +0.25 pp -> 85,990 per arm  (171,980 total)
+  +0.50 pp -> 22,223 per arm  (44,446 total)
+  +0.75 pp -> 10,198 per arm  (20,396 total)
+  +1.00 pp -> 5,916 per arm  (11,832 total)
+
+Mobile users entering the test per day (this experiment): 1,888
+  +0.25 pp -> about 91 days
+  +0.50 pp -> about 24 days
+  +0.75 pp -> about 11 days
+  +1.00 pp -> about 6 days
