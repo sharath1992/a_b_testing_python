@@ -28,17 +28,17 @@ print(f"NULLs in Orders:\n{orders.isna().sum()}\n")
 print(f"Max Order Date: {orders['ordered_at'].max()}")
 print(f"Min Order Date: {orders['ordered_at'].min()}")
 print(f"Max Assignment Date: {assignments['assigned_at'].max()}")
-print(f"Min Assignment Date: {assignments['assigned_at'].min()}")   # FIX: was .max()
+print(f"Min Assignment Date: {assignments['assigned_at'].min()}")   
 
 # Check if all IDs are unique (one row = one user / one assignment / one order)
 
 print(f"Uniqueness in Users table (user_id): {users['user_id'].is_unique}")
-print(f"Uniqueness in Assignments table (user_id): {assignments['user_id'].is_unique}")   # expect False: duplicates
-print(f"Uniqueness in Orders table (order_id): {orders['order_id'].is_unique}")           # FIX: orders are unique by order_id, not user_id
+print(f"Uniqueness in Assignments table (user_id): {assignments['user_id'].is_unique}")   
+print(f"Uniqueness in Orders table (order_id): {orders['order_id'].is_unique}")           
 
 # Check if all users have an assignment
 
-print(f"Do all users have an assignment?: {users['user_id'].isin(assignments['user_id']).all()}")   # FIX: .all()
+print(f"Do all users have an assignment?: {users['user_id'].isin(assignments['user_id']).all()}")   
 
 # Check that every order belongs to a user who is in both users and assignments
 
@@ -407,7 +407,7 @@ print(f"Point estimate: ${res_margin_all['diff'] * N_SCALE:+,.0f}   "
       f"95% range: ${res_margin_all['ci_lower'] * N_SCALE:+,.0f} to ${res_margin_all['ci_upper'] * N_SCALE:+,.0f}")
 
 
-# ADDED: margin decomposition (merchandise margin vs. net shipping), per user
+# Margin decomposition (merchandise margin vs. net shipping), per user
 
 dec = final_df.copy()
 dec["net_shipping"] = dec["shipping_fee_total"] - dec["shipping_cost_total"]
@@ -515,8 +515,8 @@ plt.show()
 ########### Power and Sample Size ###########
 
 ALPHA, POWER = 0.05, 0.80
-z_alpha = stats.norm.ppf(1 - ALPHA / 2)      # about 1.96
-z_power = stats.norm.ppf(POWER)              # about 0.84
+z_alpha = stats.norm.ppf(1 - ALPHA / 2)      
+z_power = stats.norm.ppf(POWER)              
 
 # Users needed per variant to detect a lift of `lift_pp` from a baseline rate
 
